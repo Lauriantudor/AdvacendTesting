@@ -1,9 +1,12 @@
 package com.sda.advancedTeting.calculator;
 
+import com.sda.advancedTeting.calculator.exceptions.TruncatedResultException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @ExtendWith(MockitoExtension.class)
 public class CalculatorTest {
@@ -71,5 +74,33 @@ public class CalculatorTest {
         assertEquals(3,result);
 
     }
+    @Test
+    void multiplyThrowsTruncatedResultException() {
+        // given
+        double a = 1000;
+        double b = Double.MAX_VALUE/(a-1);
 
+
+        Calculator calculator = new Calculator();
+
+        //  then when
+        assertThatExceptionOfType(TruncatedResultException.class)
+                .isThrownBy(
+                        // lambda (paramtrii) -> {cod}
+                        () -> calculator.multiply(a,b)
+                );
+    }
+    @Test
+    void IllegalArgumentException(){
+        double a=10;
+        double b=0;
+        Calculator calculator= new Calculator();
+
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(
+                        ()->calculator.divide(a,b)
+                )
+                .withMessage("Division by 0 is not supported");
+    }
+    //to do moduloexception
 }
